@@ -15,6 +15,7 @@
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "yarn migrate:test; jest",
+    "migrate": "yarn prisma migrate dev --name postgres-init",
     "migrate:test": "dotenv -e .env.test -- yarn prisma migrate dev --name postgres-init",
     "test:silent": "yarn test --silent",
     "test:watch": "yarn test --watchAll",

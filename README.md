@@ -1,7 +1,9 @@
 # count-api
+
 This application will count the access number based on the authenticated user.
 
 ## How to run aplication
+
 You can use [docker](https://www.docker.com/) or run the application on your machine.
 
 ### Steps to run the application
@@ -11,6 +13,7 @@ Clone this repository then enter the folder and install the dependencies
 ```
 npm install
 ```
+
 or
 
 ```
@@ -25,6 +28,7 @@ Or you can create a `.env` file with this information. Example:
 ```
 DATABASE_URL="postgresql://ton:approved_by_ton@localhost:5432/ton_db?schema=public"
 ```
+
 After that we will need to run migrations that will create the tables in our database
 
 ```
@@ -46,3 +50,12 @@ npm run start:dev
 ```
 
 With this the application will be running on port 3000 you will be able to see the api documentation [here](http://localhost:3000/docs/)
+
+To run the tests:
+
+```
+yarn test
+
+// Or
+npm run test
+```
