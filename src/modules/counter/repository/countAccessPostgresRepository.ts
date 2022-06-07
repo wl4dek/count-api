@@ -1,5 +1,4 @@
 import { CountAccessNumberRepository, ResponseCountApi } from '@/domain/repository';
-import axios from 'axios';
 import env from '@/config/env';
 import { dbClient } from '@/infra/database';
 import { Inject } from '@nestjs/common';
