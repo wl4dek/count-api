@@ -1,16 +1,17 @@
 import { Module } from '@nestjs/common';
 
 import { CountAccessNumberRepository } from '@/domain/repository';
-import { CountAccessMemoryRepository } from '@/modules/counter/repository/countAccessRepository';
+import { CountAccessPostgresRepository } from '@/modules/counter/repository';
 import { CounterController } from '@/modules/counter/counter.controller';
+import { CommonModule } from '../common/common.module';
 
 @Module({
-  imports: [],
+  imports: [CommonModule],
   controllers: [CounterController],
   providers: [
     {
       provide: CountAccessNumberRepository,
-      useClass: CountAccessMemoryRepository,
+      useClass: CountAccessPostgresRepository,
     },
   ],
 })

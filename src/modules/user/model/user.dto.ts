@@ -25,3 +25,13 @@ export class UserDto implements UserConstructor {
   @Exclude()
   public password!: string;
 }
+
+export class UserAuth {
+  @IsString()
+  @IsNotEmpty()
+  public email!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  public password!: string;
+}

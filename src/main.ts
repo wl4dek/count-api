@@ -1,13 +1,13 @@
 import { NestFactory, Reflector } from '@nestjs/core';
-import { SwaggerModule } from '@nestjs/swagger';
-import { join } from 'path';
+import { ClassSerializerInterceptor, ValidationPipe, VersioningType } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { TimeoutInterceptor } from '@/modules/common';
 
 import { AppModule } from '@/app.module';
-// import { readOpenAPISpec } from '@/modules/common/utils';
 
 import env from '@/config/env';
-import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
-import { TimeoutInterceptor } from '@/modules/common';
+import csurf from 'csurf';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -15,9 +15,20 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   app.useGlobalInterceptors(new ClassSerializerInterceptor(refactor));
   app.useGlobalInterceptors(new TimeoutInterceptor(refactor));
-  // const oas = await readOpenAPISpec(join(__dirname, 'specs', 'openapi.json'));
-  // SwaggerModule.setup('docs/rest', app, oas);
+  app.enableVersioning({
+    type: VersioningType.URI,
+    defaultVersion: '1',
+  });
 
+  const config = new DocumentBuilder()
+    .setTitle('TON API')
+    .setDescription('Count number access')
+    .setVersion('1.0')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('docs', app, document);
+
+  app.use(helmet());
   await app.listen(env.app.port);
 }
 

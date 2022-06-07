@@ -8,6 +8,7 @@ export default {
   },
   security: {
     saltRounds: getMandatoryEnvValue('SALT_ROUNDS', 10),
+    constant: 'ton-test-aplication',
   },
   provider: {
     countapi: 'https://api.countapi.xyz/hit',

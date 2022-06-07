@@ -1,6 +1,6 @@
 export abstract class CountAccessNumberRepository {
-  abstract incrementAccessNumber(): Promise<void>;
-  abstract getAccessNumber(): Promise<ResponseCountApi>;
+  abstract incrementAccessNumber(userId: string): Promise<ResponseCountApi>;
+  abstract getAccessNumber(userId: string): Promise<ResponseCountApi>;
 }
 
 export interface ResponseCountApi {

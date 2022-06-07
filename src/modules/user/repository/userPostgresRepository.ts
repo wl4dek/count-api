@@ -2,9 +2,8 @@ import env from '@/config/env';
 import { User } from '@/domain/entity';
 import { UserRepository } from '@/domain/repository';
 import { dbClient } from '@/infra/database';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import bcrypt from 'bcrypt';
-import { UserDto } from '@/modules/user/model';
 
 @Injectable()
 export class UserPostgresRepository extends UserRepository {
@@ -16,7 +15,7 @@ export class UserPostgresRepository extends UserRepository {
     return bcrypt.hash(password, env.security.saltRounds);
   }
 
-  async create(user: User): Promise<UserDto> {
+  async create(user: User): Promise<User> {
     user.password = await this.hash(user.password);
 
     const userCreated = await dbClient.user.create({
@@ -28,10 +27,24 @@ export class UserPostgresRepository extends UserRepository {
     return userCreated;
   }
 
-  async get(id: string): Promise<UserDto> {
-    const userFound = await dbClient.user.findUnique({
+  async get(id: string): Promise<User> {
+    const userFound = await dbClient.user.findFirst({
       where: {
         id,
+      },
+    });
+
+    if (!userFound) {
+      throw new NotFoundException('User not found');
+    }
+
+    return userFound;
+  }
+
+  async getByEmail(email: string): Promise<User> {
+    const userFound = await dbClient.user.findUnique({
+      where: {
+        email,
       },
     });
 
@@ -39,6 +52,6 @@ export class UserPostgresRepository extends UserRepository {
       throw new Error('User not found');
     }
 
-    return new UserDto({ ...userFound });
+    return userFound;
   }
 }

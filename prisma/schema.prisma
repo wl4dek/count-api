@@ -17,6 +17,16 @@ model User {
   password    String
   created_at  DateTime  @default(now())
   updated_at  DateTime  @default(now())
-
+  counter     Counter?
   @@map("users")
+}
+
+model Counter {
+  id          String    @id   @default(uuid())
+  count       Int
+  userId      String    @unique
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @default(now())
+  @@map("counters")
 }

@@ -1,22 +1,33 @@
-import { UserRepository } from '@/domain/repository';
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req } from '@nestjs/common';
 import { UserDto } from '@/modules/user/model';
-import { AuthGuard } from '@nestjs/passport';
+import { UserService } from './service/user.service';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Request } from 'express';
+import { JWT } from '@/domain/entity';
+import { Public } from '@/modules/common';
 
+@ApiTags('User')
 @Controller('user')
 export class UserController {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(private readonly userService: UserService) {}
 
-  @UseGuards(AuthGuard('local'))
-  @Get(':id')
-  async getUser(@Param('id') id: string): Promise<UserDto> {
-    const user = this.userRepository.get(id) as Promise<UserDto>;
-    return user;
+  @Get()
+  @ApiOperation({
+    summary: 'Get user by Id',
+  })
+  async getUser(@Req() request: Request): Promise<UserDto> {
+    const { userId } = request.user as JWT;
+    const user = await this.userService.findById(userId);
+    return new UserDto({ ...user });
   }
 
   @Post()
+  @Public()
+  @ApiOperation({
+    summary: 'Create a new User',
+  })
   async createUser(@Body() userDto: UserDto): Promise<UserDto> {
-    const user = this.userRepository.create(userDto) as Promise<UserDto>;
-    return user;
+    const user = await this.userService.create(userDto);
+    return new UserDto({ ...user });
   }
 }
