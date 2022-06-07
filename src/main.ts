@@ -6,7 +6,6 @@ import { TimeoutInterceptor } from '@/modules/common';
 import { AppModule } from '@/app.module';
 
 import env from '@/config/env';
-import csurf from 'csurf';
 import helmet from 'helmet';
 
 async function bootstrap() {

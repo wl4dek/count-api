@@ -7,6 +7,7 @@ import faker from '@faker-js/faker';
 import axios from 'axios';
 import { dbClient } from '@/infra/database';
 import { User } from '@/domain/entity';
+import { CommonModule } from '@/modules/common/common.module';
 
 describe('CounterController', () => {
   let controller: CounterController;
@@ -37,6 +38,7 @@ describe('CounterController', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
+      imports: [CommonModule],
       controllers: [CounterController],
       providers: [
         {

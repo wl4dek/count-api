@@ -7,7 +7,7 @@ describe('AppController', () => {
   let controller: AppController;
 
   const mockAuthService = {
-    login: jest.fn((request) => {
+    login: jest.fn(() => {
       return {
         access_token: 'jwt_fake_authenticated',
       };
