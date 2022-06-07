@@ -15,7 +15,7 @@ export class CountAccessPostgresRepository implements CountAccessNumberRepositor
 
   async incrementAccessNumber(userId: string): Promise<ResponseCountApi> {
     const { data } = await this.httpClient.request({
-      url: `${provider.countapi}/t/${userId}`,
+      url: `${provider.countapi}/ton/${userId}`,
       method: HttpMethod.GET,
     });
 
